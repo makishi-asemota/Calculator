@@ -10,15 +10,23 @@
 <body>
     <div class="container">
         <div id="display"></div>
-        <div id="buttons"><button>1</button>
-            <button>2</button>
-            <button>3</button>
-            <button>4</button>
-            <button>5</button>
-            <button>6</button>
-            <button>7</button>
-            <button>8</button>
-            <button>9</button>
+        <div id="buttons"><button onclick="calButton(this)" value="7">7</button>
+            <button onclick="calButton(this)" value="8">8</button>
+            <button onclick="calButton(this)" value="9">9</button>
+            <button onclick="calButton(this)" value="/" id="divide">/</button>
+            <button onclick="calButton(this)" value="4">4</button>
+            <button onclick="calButton(this)" value="5">5</button>
+            <button onclick="calButton(this)" value="6">6</button>
+            <button onclick="calButton(this)" value="*" id="multiply">*</button>
+            <button onclick="calButton(this)" value="1">1</button>
+            <button onclick="calButton(this)" value="2">2</button>
+            <button onclick="calButton(this)" value="3">3</button>
+            <button onclick="calButton(this)" value="-" id="subtract">-</button>
+            <button onclick="calButton(this)" value="0">0</button>
+            <button onclick="calButton(this)" value=".">.</button>
+            <button>=</button>
+            <button onclick="calButton(this)" value="+" id="add">+</button>
+            <button class="clear">CE</button>
         </div>
 
     </div>
@@ -54,6 +62,17 @@
                     return divide(num1, num2);    
             };
         };
+
+        function calButton(button) {
+            var x = button.value;
+            var value = document.getElementById("display").innerHTML += x;
+        };
+
+        //let value = document.getElementById("display").innerHTML;
+        if (document.getElementById('divide').clicked == true) {
+            value2 = button.value;
+            document.getElementById("display").innerHTML = operate(value, value2, "/")
+        }
     </script>
 </body>
 </html>
