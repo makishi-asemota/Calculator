@@ -4,38 +4,50 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
     <title>Calculator</title>
+    <link href="styles.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <div id="display"></div>
-        <div id="buttons"><button onclick="calButton(this)" value="7">7</button>
-            <button onclick="calButton(this)" value="8">8</button>
-            <button onclick="calButton(this)" value="9">9</button>
-            <button onclick="calButton(this)" value="/" id="divide">/</button>
-            <button onclick="calButton(this)" value="4">4</button>
-            <button onclick="calButton(this)" value="5">5</button>
-            <button onclick="calButton(this)" value="6">6</button>
-            <button onclick="calButton(this)" value="*" id="multiply">*</button>
-            <button onclick="calButton(this)" value="1">1</button>
-            <button onclick="calButton(this)" value="2">2</button>
-            <button onclick="calButton(this)" value="3">3</button>
-            <button onclick="calButton(this)" value="-" id="subtract">-</button>
-            <button onclick="calButton(this)" value="0">0</button>
-            <button onclick="calButton(this)" value=".">.</button>
-            <button>=</button>
-            <button onclick="calButton(this)" value="+" id="add">+</button>
-            <button class="clear">CE</button>
+    <div class="calculatorContainer">
+        <div class="output">
+            <div class="pOperation"></div>
+            <div class="cOperation">0</div>
         </div>
-
+        <div class="buttonContainer">
+          <button class="allClear">AC</button>
+          <button class="delete">DEL</button>
+          <button class="operation">/</button>
+          <button class="operation">*</button>
+          <button class="calNumber" value="1">1</button>
+          <button class="calNumber" value="2">2</button>
+          <button class="calNumber" value="3">3</button>
+          <button class="operation">+</button>
+          <button class="calNumber" value="4">4</button>
+          <button class="calNumber" value="5">5</button>
+          <button class="calNumber" value="6">6</button>
+          <button class="operation">-</button>
+          <button class="calNumber" value="7">7</button>
+          <button class="calNumber" value="8">8</button>
+          <button class="calNumber" value="9">9</button>
+          <button class="calNumber period">.</button>
+          <button class="calNumber" value="0">0</button>
+          <button class="equal spanTwo">=</button>
+        </div>
     </div>
-
-
-
     <script>
+        const numberButtons = document.querySelectorAll('.calNumber');
+        const operationButtons = document.querySelectorAll('.operation');
+        const equalButton = document.querySelector('.equal');
+        const deleteButton = document.querySelector('.delete');
+        const allClearButton = document.querySelector('.allClear');
+        const previousOperand = document.querySelector('.pOperation');
+        const currentOperand = document.querySelector('.cOperation');
+        const calScreen = document.querySelector('.output');
+        const periodButton = document.querySelector('.period')
+
+        //created each function for each operator
         function add(a, b) {
-            return a + b;
+             return a + b;
         };
 
         function subtract(a, b) {
@@ -43,36 +55,84 @@
         };
 
         function multiply(a, b) {
-            return a * b;
+             return a * b;
         };
+
 
         function divide(a, b) {
-            return a / b;
+             return a / b;
         };
 
+        //function which takes the two numbers from user input and calculates the answer depending on the chosen operand
         function operate(num1, num2, operator) {
             switch (operator) {
-                case "+":
-                    return add(num1, num2);
-                case "-":
-                    return subtract(num1, num2);
-                case "*":
-                    return multiply(num1, num2);
-                case "/":
-                    return divide(num1, num2);    
-            };
+             case "+":
+                 return add(num1, num2);
+             case "-":
+                  return subtract(num1, num2);
+             case "*":
+                 return multiply(num1, num2);
+             case "/":
+                 return divide(num1, num2);
+            }
         };
 
-        function calButton(button) {
-            var x = button.value;
-            var value = document.getElementById("display").innerHTML += x;
+        let storedNumber = '';
+        let clickedOperator = '';
+        let firstNumber = '';
+        let result = '';
+
+        //event listener for each number button that when clicked on it is shown on display
+        numberButtons.forEach((number) => {
+            number.addEventListener('click', function() {
+                storedNumber += number.value;
+                currentOperand.textContent = storedNumber;
+            })
+        });
+
+        //event listener for the AC button which allows user to clear the output display
+        allClearButton.addEventListener('click', function() {
+            storedNumber = '';
+            currentOperand.textContent = '';
+            previousOperand.textContent = '';
+        });
+
+        //event listener for the delete button which deletes one digit from input number
+       deleteButton.addEventListener('click', function(){
+           storedNumber = storedNumber.slice(0,-1);
+           currentOperand.textContent = storedNumber;
+        });
+
+        //event listener for the period button
+        periodButton.addEventListener('click', function() {
+            storedNumber += '.'
+            currentOperand.textContent = storedNumber
+        })
+
+        //event listener for each operation button that also stores the first number entered by the user
+        operationButtons.forEach((operator => {
+            operator.addEventListener('click', function() {
+                firstNumber = storedNumber;
+                clickedOperator = operator.textContent;
+                previousOperand.textContent = storedNumber + clickedOperator;
+                storedNumber = '';
+            })
+        }));
+
+        //event listener for the equal button which displays the result after it is clicked
+        equalButton.addEventListener('click', function() {
+            displayResult();
+        });
+
+        //function that operates the first number, second number, and operand entered by the user
+        function displayResult() {
+            result = operate(parseFloat(firstNumber), parseFloat(storedNumber), clickedOperator);
+            currentOperand.textContent = result;
+            previousOperand.textContent = firstNumber + '' + clickedOperator + '' + storedNumber;
+            storedNumber = result
         };
 
-        //let value = document.getElementById("display").innerHTML;
-        if (document.getElementById('divide').clicked == true) {
-            value2 = button.value;
-            document.getElementById("display").innerHTML = operate(value, value2, "/")
-        }
     </script>
+    
 </body>
 </html>
